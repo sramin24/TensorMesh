@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tensormesh"
+version = "0.1.0"
+description = "Distributed pipeline-parallel LLM inference across a trusted local network"
+requires-python = ">=3.11"
+dependencies = [
+    "torch>=2.3.0",
+    "transformers>=4.40.0",
+    "safetensors>=0.4.3",
+    "accelerate>=0.30.0",
+    "fastapi>=0.111.0",
+    "uvicorn[standard]>=0.30.0",
+    "sse-starlette>=2.1.0",
+    "grpcio>=1.64.0",
+    "grpcio-tools>=1.64.0",
+    "protobuf>=5.27.0",
+    "zeroconf>=0.132.0",
+    "typer>=0.12.0",
+    "rich>=13.7.0",
+    "numpy>=1.26.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.23.0",
+]
+
+[project.scripts]
+tensormesh = "tensormesh.cli:app"
+
+[tool.setuptools.packages.find]
+include = ["tensormesh*"]
