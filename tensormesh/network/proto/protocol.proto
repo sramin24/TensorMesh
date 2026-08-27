@@ -1,0 +1,51 @@
+syntax = "proto3";
+package tensormesh;
+
+service NodeService {
+  rpc Handshake (HandshakeRequest) returns (HandshakeResponse);
+  rpc ProbeInterconnect (PingPayload) returns (PongPayload);
+  rpc ForwardActivation (stream ActivationFrame) returns (stream ActivationFrame);
+  rpc GenerateNextToken (ActivationFrame) returns (TokenFrame);
+}
+
+message HandshakeRequest {
+  string node_id = 1;
+  string device_type = 2; // "cuda", "mps", "cpu", "rocm"
+  int64 total_vram_bytes = 3;
+  int64 available_vram_bytes = 4;
+  float compute_tflops_estimate = 5;
+}
+
+message HandshakeResponse {
+  bool accepted = 1;
+  string cluster_id = 2;
+  int32 assigned_rank = 3;
+}
+
+message PingPayload {
+  int64 client_timestamp_ns = 1;
+  bytes test_payload = 2;
+}
+
+message PongPayload {
+  int64 client_timestamp_ns = 1;
+  int64 server_timestamp_ns = 2;
+}
+
+message ActivationFrame {
+  string session_id = 1;
+  int32 seq_step = 2;
+  repeated int32 shape = 3;
+  string dtype = 4; // "FP16", "FP8_E4M3", "INT8"
+  bytes tensor_data = 5;
+  bytes quant_scales = 6;
+  bool is_prefill = 7;
+  bool is_last_stage = 8;
+}
+
+message TokenFrame {
+  string session_id = 1;
+  int32 token_id = 2;
+  string token_text = 3;
+  bool is_eos = 4;
+}
