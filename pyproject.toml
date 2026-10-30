@@ -35,3 +35,6 @@ tensormesh = "tensormesh.cli:app"
 
 [tool.setuptools.packages.find]
 include = ["tensormesh*"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
